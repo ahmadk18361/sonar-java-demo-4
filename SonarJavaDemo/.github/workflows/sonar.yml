@@ -39,6 +39,6 @@ jobs:
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
         with:
-          organization: <your-sonar-org>
-          projectKey: <your-sonar-project-key>
+          organization: <ahmadk18361>
+          projectKey: <sonar-java-demo>
           token: ${{ secrets.SONAR_TOKEN }}
