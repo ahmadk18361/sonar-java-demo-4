@@ -2,7 +2,7 @@
     agent any
 
     tools {
-        maven 'maven'
+        maven 'Maven'
         jdk 'jdk-17'
     }
 
