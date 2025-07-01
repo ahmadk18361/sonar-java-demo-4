@@ -27,11 +27,13 @@
             steps {
                 withSonarQubeEnv("${SONARQUBE_SERVER}") {
                     sh """
-                        mvn sonar:sonar \
+                      mvn sonar:sonar \
                         -Dsonar.projectKey=sonar-java-demo \
-                        -Dsonar.projectName=sonar-java-demo \
-                        -Dsonar.host.url=https://sonarcloud.io
+                        -Dsonar.organization=ahmadk18361 \
+                        -Dsonar.host.url=https://sonarcloud.io \
+                        -Dsonar.login=$SONAR_TOKEN
                     """
+
                 }
             }
         }
