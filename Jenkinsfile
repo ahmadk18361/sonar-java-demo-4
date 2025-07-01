@@ -9,7 +9,7 @@ pipeline {
     environment {
         SONARQUBE_SERVER = 'SonarQube'  // Must match exactly the SonarQube name you set in Jenkins
         SONAR_PROJECT_KEY = 'sonar-java-analysis'
-        SONAR_TOKEN = credentials ('sonar-token') //
+        SONAR_TOKEN = credentials ('e8635ada11a2493b8127512f2fc5ce2f') //
     }
 
     stages {
