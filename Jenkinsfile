@@ -3,7 +3,6 @@ pipeline {
 
     tools {
         maven 'Maven'        // Make sure this matches what you named Maven under Jenkins tools
-        sonarQubeScanner ' SonarQube' 
         jdk 'jdk-17'         // Or whatever JDK name you configured in Jenkins
     }
 
