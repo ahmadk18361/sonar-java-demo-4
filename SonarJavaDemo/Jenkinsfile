@@ -1,7 +1,3 @@
-59ba08aeb878f26216259f91cf82b59c4fd8983e
-
-
-
 pipeline {
     agent any
 
