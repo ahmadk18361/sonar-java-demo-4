@@ -32,7 +32,7 @@ pipeline {
                               -Dsonar.projectKey=ahmadk18361_sonar-java-demo \
                               -Dsonar.organization=ahmadk18361 \
                               -Dsonar.host.url=https://sonarcloud.io \
-                              -Dsonar.login=$SONAR_TOKEN
+                            
                         """
                     }
                 }
