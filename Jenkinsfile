@@ -1,14 +1,13 @@
-pipeline {
+ pipeline {
     agent any
 
     tools {
-        maven 'Maven'        // Make sure this matches what you named Maven under Jenkins tools
-        jdk 'jdk-17'         // Or whatever JDK name you configured in Jenkins
+        maven 'maven'
+        jdk 'jdk-17'
     }
 
     environment {
-        SONARQUBE_SERVER = 'SonarCloud'  // Must match exactly the SonarQube name you set in Jenkins
-
+        SONARQUBE_SERVER = 'SonarCloud' // Must match the name you configured in Jenkins > Global Tool Configuration
     }
 
     stages {
@@ -20,16 +19,21 @@ pipeline {
 
         stage('Build') {
             steps {
-                    sh 'mvn clean package'
+                sh 'mvn clean package'
             }
         }
 
-         stage('SonarQube Scan') {
+        stage('SonarQube Scan') {
             steps {
-                    withSonarQubeEnv("${SONARQUBE_SERVER}") {
-                        sh "mvn sonar:sonar"
-                    }
+                withSonarQubeEnv("${SONARQUBE_SERVER}") {
+                    sh """
+                        mvn sonar:sonar \
+                        -Dsonar.projectKey=sonar-java-demo \
+                        -Dsonar.projectName=sonar-java-demo \
+                        -Dsonar.host.url=https://sonarcloud.io
+                    """
                 }
             }
         }
-    }    
+    }
+}
