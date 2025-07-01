@@ -8,6 +8,8 @@ pipeline {
 
     environment {
         SONARQUBE_SERVER = 'SonarQube'  // Must match exactly the SonarQube name you set in Jenkins
+        SONAR_PROJECT_KEY = 'sonar-java-analysis'
+        SONAR_TOKEN = credentials ('sonar-token') //
     }
 
     stages {
@@ -19,16 +21,18 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'mvn clean package'
-            }
-        }
-
-        stage('SonarQube Scan') {
-            steps {
-                withSonarQubeEnv("${SONARQUBE_SERVER}") {
-                    sh 'mvn sonar:sonar'
+                dir('sonarJavaDemo') {
+                    sh 'mvn clean package'
                 }
             }
         }
-    }
-}
+
+         stage('SonarQube Scan') {
+            steps {
+                dir('SonarJavaDemo') {
+                    withSonarQubeEnv("${SONARQUBE_SERVER}") {
+                        sh "mvn sonar:sonar"
+                    }
+                }
+            }
+        }
