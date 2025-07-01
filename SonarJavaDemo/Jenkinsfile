@@ -1,0 +1,38 @@
+59ba08aeb878f26216259f91cf82b59c4fd8983e
+
+
+
+pipeline {
+    agent any
+
+    tools {
+        maven 'Maven'        // Make sure this matches what you named Maven under Jenkins tools
+        jdk 'jdk-17'         // Or whatever JDK name you configured in Jenkins
+    }
+
+    environment {
+        SONARQUBE_SERVER = 'SonarQube'  // Must match exactly the SonarQube name you set in Jenkins
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/ahmadk18361/sonar-java-demo.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+
+        stage('SonarQube Scan') {
+            steps {
+                withSonarQubeEnv("${SONARQUBE_SERVER}") {
+                    sh 'mvn sonar:sonar'
+                }
+            }
+        }
+    }
+}
