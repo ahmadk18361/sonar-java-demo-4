@@ -1,4 +1,4 @@
- pipeline {
+pipeline {
     agent any
 
     tools {
@@ -7,7 +7,7 @@
     }
 
     environment {
-        SONARQUBE_SERVER = 'SonarCloud' // Must match the name you configured in Jenkins > Global Tool Configuration
+        SONARQUBE_SERVER = 'SonarCloud' // Must match Jenkins config name exactly
     }
 
     stages {
@@ -26,14 +26,15 @@
         stage('SonarQube Scan') {
             steps {
                 withSonarQubeEnv("${SONARQUBE_SERVER}") {
-                    sh """
-                      mvn sonar:sonar \
-                        -Dsonar.projectKey=sonar-java-demo \
-                        -Dsonar.organization=ahmadk18361 \
-                        -Dsonar.host.url=https://sonarcloud.io \
-                        -Dsonar.login=$SONAR_TOKEN
-                    """
-
+                    withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+                        sh """
+                            mvn sonar:sonar \
+                              -Dsonar.projectKey=sonar-java-demo \
+                              -Dsonar.organization=ahmadk18361 \
+                              -Dsonar.host.url=https://sonarcloud.io \
+                              -Dsonar.login=$SONAR_TOKEN
+                        """
+                    }
                 }
             }
         }
