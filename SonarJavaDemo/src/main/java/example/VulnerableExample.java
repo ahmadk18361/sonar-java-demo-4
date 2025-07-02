@@ -1,3 +1,4 @@
+package example;
 import java.sql.*;
 
 public class VulnerableExample {
