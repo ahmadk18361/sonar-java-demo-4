@@ -7,7 +7,7 @@
 
     <groupId>com.example</groupId>
     <artifactId>sonar-java-demo</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>latest</version>
 
     <properties>
         <sonar.java.binaries>target</sonar.java.binaries>
