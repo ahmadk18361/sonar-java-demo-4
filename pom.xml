@@ -17,6 +17,21 @@
 
     <build>
         <plugins>
+        
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>4.7.0.0</version>
+                <executions>
+                <execution>
+                <phase>verify</phase>
+                <goals>
+                <goal>check</goal>
+                </goals>
+                </execution>
+                </executions>
+                </plugin>
+
             <plugin>
                 <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
