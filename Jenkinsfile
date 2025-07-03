@@ -45,10 +45,6 @@ pipeline {
                 }
             }
         }
-
-
-
-
         stage('Security Scan - SpotBugs') {
             steps { 
                 sh 'mvn verify spotbugs:check'
