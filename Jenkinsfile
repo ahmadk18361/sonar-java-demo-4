@@ -41,13 +41,13 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 wihSonarQubeEnv ('YourSonarServer') {
-                    sh 'mvn clean verfiy sonar:sonar -Dsonar.projectkey=your-project-key -Dsonar.login=your-token'
+                    bat 'mvn clean verfiy sonar:sonar -Dsonar.projectkey=your-project-key -Dsonar.login=your-token'
                 }
             }
         }
         stage('Security Scan - SpotBugs') {
             steps { 
-                sh 'mvn verify spotbugs:check'
+                bat 'mvn verify spotbugs:check'
 
             }
         }
