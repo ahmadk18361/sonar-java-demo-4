@@ -1,13 +1,85 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
          http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.demo</groupId>
-    <artifactId>SonarDemo</artifactId>
-    <version>1.0</version>
+
+    <groupId>com.example</groupId>
+    <artifactId>sonar-java-demo</artifactId>
+    <version>latest</version>
+
     <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <sonar.java.binaries>target</sonar.java.binaries>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
     </properties>
+
+    <dependencies>
+                    <dependency>
+                    <groupId>com.h3xstream.findsecbugs</groupId>
+                    <artifactId>findsecbugs-plugin</artifactId>
+                    <version>1.12.0</version>
+                    </dependency>
+
+                    <dependency>
+                    <groupId>com.h3xstream.findsecbugs</groupId>
+                    <artifactId>findsecbugs-plugin</artifactId>
+                    <version>1.12.0</version>
+                    </dependency>
+
+
+
+
+
+     </dependencies>
+
+
+
+
+
+    <build>
+        <plugins>
+        
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>4.7.0.0</version>
+                <executions>
+                <execution>
+                <phase>verify</phase>
+                <goals>
+                <goal>check</goal>
+                </goals>
+                </execution>
+                </executions>
+                </plugin>
+
+                <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>4.7.0.0</version>
+
+                
+
+
+                <executions>
+                    <execution>
+                    <phase>verify</phase>
+                    <goals>
+                       <goal>check</goal>
+                    </goals>
+                    </execution>
+                </executions>
+                </plugin>
+
+
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>7.1.0.4889</version>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
