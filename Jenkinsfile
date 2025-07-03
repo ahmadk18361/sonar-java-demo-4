@@ -3,11 +3,11 @@ pipeline {
 
     tools {
         maven 'Maven'
-        
+        jdk 'jdk-17'
     }
 
     environment {
-        SONARQUBE_SERVER = 'SonarQube' // Must match Jenkins config name exactly
+        SONARQUBE_SERVER = 'SonarCloud' // Must match Jenkins config name exactly
     }
 
     stages {
@@ -19,7 +19,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                bat 'mvn clean package'
+                sh 'mvn clean package'
             }
         }
 
@@ -27,13 +27,13 @@ pipeline {
             steps {
                 withSonarQubeEnv("${SONARQUBE_SERVER}") {
                     withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-                        bat """
-                            mvn sonar:sonar ^
-                              -Dsonar.projectKey=ahmadk18361_sonar-java-demo ^
-                              -Dsonar.organization=ahmadk18361 ^
-                              -Dsonar.host.url=https://localhost9000 ^
-                              -Dsonae.login=%SONAR_TOKEN%
-                            """
+                        sh """
+                            mvn sonar:sonar \
+                              -Dsonar.projectKey=ahmadk18361_sonar-java-demo \
+                              -Dsonar.organization=ahmadk18361 \
+                              -Dsonar.host.url=https://sonarcloud.io \
+                              -Dsonar.login=$SONAR_TOKEN
+                        """
                     }
                 }
             }
