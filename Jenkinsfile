@@ -1,60 +1,24 @@
 pipeline {
     agent any
-
     tools {
-        maven 'Maven'
-        jdk 'jdk-17'
+        maven 'Maven 3.8.1' // make sure this matches your Jenkins tool config
     }
-
-    environment {
-        SONARQUBE_SERVER = 'SonarCloud' // Must match Jenkins config name exactly
-    }
-
     stages {
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/ahmadk18361/sonar-java-demo.git'
-            }
-        }
-
         stage('Build') {
             steps {
-                sh 'mvn clean package'
-            }
-        }
-
-        stage('SonarQube Scan') {
-            steps {
-                withSonarQubeEnv("${SONARQUBE_SERVER}") {
-                    withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-                        sh """
-                            mvn sonar:sonar \
-                              -Dsonar.projectKey=ahmadk18361_sonar-java-demo \
-                              -Dsonar.organization=ahmadk18361 \
-                              -Dsonar.host.url=https://sonarcloud.io \
-                            
-                        """
-                    }
-                }
+                sh 'mvn clean install'
             }
         }
         stage('SonarQube Analysis') {
+            environment {
+                SONAR_USER_HOME = "${env.WORKSPACE}/.sonar" 
+                scannerHome = tool 'SonarQube Scanner'
+            }
             steps {
-                wihSonarQubeEnv ('YourSonarServer') {
-                    sh 'mvn clean verfiy sonar:sonar -Dsonar.projectkey=your-project-key -Dsonar.login=your-token'
+                withSonarQubeEnv('LocalSonar') {
+                    sh "${scannerHome}/bin/sonar-scanner"
                 }
             }
         }
-
-
-
-
-        stage('Security Scan - SpotBugs') {
-            steps { 
-                sh 'mvn verify spotbugs:check'
-
-            }
-        }
-
     }
 }
