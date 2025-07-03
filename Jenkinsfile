@@ -27,13 +27,13 @@ pipeline {
             steps {
                 withSonarQubeEnv("${SONARQUBE_SERVER}") {
                     withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-                        bat """
-                            mvn sonar:sonar \
-                              -Dsonar.projectKey=ahmadk18361_sonar-java-demo \
-                              -Dsonar.organization=ahmadk18361 \
-                              -Dsonar.host.url=https://localhost:9000 \
-                              -Dsonar.login=$SONAR_TOKEN
-                        """
+                       bat """
+                            mvn clean verify sonar:sonar \
+                              -Dsonar.projectKey=SonarJavaDemo \
+                              -Dsonar.projectName='SonarJavaDemo' \
+                              -Dsonar.host.url=http://localhost:9000 \
+                              -Dsonar.token=sqp_37364ff8c3df723769fa870f1ddfe8cdc0992f89
+                            """
                     }
                 }
             }
