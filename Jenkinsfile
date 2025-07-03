@@ -28,12 +28,12 @@ pipeline {
                 withSonarQubeEnv("${SONARQUBE_SERVER}") {
                     withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
                         bat """
-                            mvn sonar:sonar \
-                              -Dsonar.projectKey=ahmadk18361_sonar-java-demo \
-                              -Dsonar.organization=ahmadk18361 \
-                              -Dsonar.host.url=https://localhost9000\
-                            
-                        """
+                            mvn sonar:sonar ^
+                              -Dsonar.projectKey=ahmadk18361_sonar-java-demo ^
+                              -Dsonar.organization=ahmadk18361 ^
+                              -Dsonar.host.url=https://localhost9000 ^
+                              -Dsonae.login=%SONAR_TOKEN%
+                            """
                     }
                 }
             }
