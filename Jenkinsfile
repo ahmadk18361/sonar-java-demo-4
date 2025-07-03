@@ -27,7 +27,7 @@ pipeline {
             steps {
                 withSonarQubeEnv("${SONARQUBE_SERVER}") {
                     withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-                        sh """
+                        bat """
                             mvn sonar:sonar \
                               -Dsonar.projectKey=ahmadk18361_sonar-java-demo \
                               -Dsonar.organization=ahmadk18361 \
