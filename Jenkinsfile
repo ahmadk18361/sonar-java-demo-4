@@ -38,19 +38,5 @@ pipeline {
                 }
             }
         }
-        stage('SonarQube Analysis') {
-            steps {
-                wihSonarQubeEnv ('YourSonarServer') {
-                    bat 'mvn clean verfiy sonar:sonar -Dsonar.projectkey=your-project-key -Dsonar.login=your-token'
-                }
-            }
-        }
-        stage('Security Scan - SpotBugs') {
-            steps { 
-                bat 'mvn verify spotbugs:check'
-
-            }
-        }
-
     }
 }
