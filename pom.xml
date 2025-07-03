@@ -7,36 +7,13 @@
 
     <groupId>com.example</groupId>
     <artifactId>sonar-java-demo</artifactId>
-    <version>latest</version>
+    <version>1.0-SNAPSHOT</version>
 
     <properties>
         <sonar.java.binaries>target</sonar.java.binaries>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
-
-    <dependencies>
-                    <dependency>
-                    <groupId>com.h3xstream.findsecbugs</groupId>
-                    <artifactId>findsecbugs-plugin</artifactId>
-                    <version>1.12.0</version>
-                    </dependency>
-
-                    <dependency>
-                    <groupId>com.h3xstream.findsecbugs</groupId>
-                    <artifactId>findsecbugs-plugin</artifactId>
-                    <version>1.12.0</version>
-                    </dependency>
-
-
-
-
-
-     </dependencies>
-
-
-
-
 
     <build>
         <plugins>
@@ -54,25 +31,6 @@
                 </execution>
                 </executions>
                 </plugin>
-
-                <plugin>
-                <groupId>com.github.spotbugs</groupId>
-                <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.7.0.0</version>
-
-                
-
-
-                <executions>
-                    <execution>
-                    <phase>verify</phase>
-                    <goals>
-                       <goal>check</goal>
-                    </goals>
-                    </execution>
-                </executions>
-                </plugin>
-
 
             <plugin>
                 <groupId>org.sonarsource.scanner.maven</groupId>
