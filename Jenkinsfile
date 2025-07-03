@@ -19,7 +19,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'mvn clean package'
+                bat 'mvn clean package'
             }
         }
 
@@ -27,11 +27,11 @@ pipeline {
             steps {
                 withSonarQubeEnv("${SONARQUBE_SERVER}") {
                     withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-                        sh """
+                        bat """
                             mvn sonar:sonar \
                               -Dsonar.projectKey=ahmadk18361_sonar-java-demo \
                               -Dsonar.organization=ahmadk18361 \
-                              -Dsonar.host.url=https://sonarcloud.io \
+                              -Dsonar.host.url=https://localhost:9000 \
                               -Dsonar.login=$SONAR_TOKEN
                         """
                     }
