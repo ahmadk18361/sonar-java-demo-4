@@ -1,6 +1,6 @@
 package com.example;
 
-import java.sql.PreparedStatement*;
+import java.sql.*;
 
 public class VulnerableExample {
 
