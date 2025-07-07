@@ -2,26 +2,18 @@ package com.example;
 
 import java.sql.*;
 
-public class Vulnerable_ResourceLeak {
+public class Vulnerable_HardcodedCreds {
     public static void main(String[] args) {
         try {
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/testdb", "root", "password123");
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM users");
+            // Hardcoded credentials
+            String url = "jdbc:mysql://localhost:3306/testdb";
+            String username = "root";
+            String password = "password123";
 
-            // Resources not closed with try-with-resources
-            while (rs.next()) {
-                System.out.println("User: " + rs.getString("username"));
-            }
-
-            // Manual close (error-prone if exception is thrown earlier)
-            rs.close();
-            stmt.close();
+            Connection conn = DriverManager.getConnection(url, username, password);
             conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 }
-
-
