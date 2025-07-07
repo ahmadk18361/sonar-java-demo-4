@@ -32,7 +32,6 @@ pipeline {
                               -Dsonar.projectKey=SonarJavaDemo \
                               -Dsonar.projectName='SonarJavaDemo' \
                               -Dsonar.sources=SonarJavaDemo/src/main/java/com/example \
-                              -Dsonar.java.binaries=target/classes \
                               -Dsonar.host.url=http://localhost:9000 \
                               -Dsonar.token=sqp_37364ff8c3df723769fa870f1ddfe8cdc0992f89
                             """
