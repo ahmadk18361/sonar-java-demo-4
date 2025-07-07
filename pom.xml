@@ -9,19 +9,36 @@
     <artifactId>sonar-java-demo</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <properties>
+   <properties>
+         <properties>
         <sonar.java.binaries>target/classes</sonar.java.binaries>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-    </properties>
+         </properties>
 
+         <properties>
+         <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+         </properties>
+
+   </properties>
     <dependencies>
-        <dependency>
-          <groupId>org.junit.jupiter</groupId>
-          <artifactId>junit-jupiter</artifactId>
-          <version>5.9.1</version>
-          <scope>test</scope>
-        </dependency>
+       
+         <dependencies>
+           <dependency>
+             <groupId>org.junit.jupiter</groupId>
+             <artifactId>junit-jupiter-api</artifactId>
+             <version>5.10.0</version>
+             <scope>test</scope>
+           </dependency>
+           <dependency>
+             <groupId>org.junit.jupiter</groupId>
+             <artifactId>junit-jupiter-engine</artifactId>
+             <version>5.10.0</version>
+             <scope>test</scope>
+           </dependency>
+</dependencies>
+
+
    </dependencies>
          
     <build>
@@ -67,6 +84,13 @@
                 <version>3.9.1.2184</version>
             </plugin>
         </plugins>
+
+         <plugin>
+           <groupId>org.apache.maven.plugins</groupId>
+           <artifactId>maven-surefire-plugin</artifactId>
+           <version>3.1.2</version>
+         </plugin>
+
     </build>
 
 </project>
