@@ -3,7 +3,6 @@ package com.example;
 import java.sql.*;
 
 public class VulnerableExample {
-
    public static void main(String[] args) {
       String userInput = "' OR '1'='1";
       String query = "SELECT * FROM users WHERE username = ?";
@@ -25,8 +24,8 @@ public class VulnerableExample {
          rs.close();
          stmt.close();
          conn.close();
-
-      } catch (SQLException e) {
+      } 
+      catch (SQLException e) {
          // Swallowed exception (bad practice)
          e.printStackTrace(); // Not logging properly
       }
