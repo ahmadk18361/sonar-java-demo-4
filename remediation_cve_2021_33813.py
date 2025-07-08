@@ -14,7 +14,7 @@ if 'normalize' not in code:
     }
     '''
     code = code.replace("while ((zipEntry = zis.getNextEntry()) != null) {", 
-                        "while ((zipEntry = zis.getNextEntry()) != null) {
+                        "while ((zipEntry = zis.getNextEntry()) is not None) {
 " + fix)
 
 with open("ZipSlipCVE2021_33813Example.java", "w") as file:
