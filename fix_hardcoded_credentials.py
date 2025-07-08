@@ -17,7 +17,7 @@ def fix_credentials(java_file):
     with open(java_file, "w") as f:
         f.write(code)
 
-    print(f"[✔] Remediation applied. Backup saved to: {backup_file}")
+    print(f"[OK] Remediation applied. Backup saved to: {backup_file}")
 
 # Example usage
 if __name__ == "__main__":
