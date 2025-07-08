@@ -16,7 +16,13 @@ pipeline {
                 git 'https://github.com/ahmadk18361/sonar-java-demo.git'
             }
         }
-
+        
+        stage('Remediate Vulnerabilities') {
+            steps {
+                sh 'python fix_hardcoded_credentials.py'
+            }
+        }
+        
         stage('Build') {
             steps {
                 bat 'mvn clean package'
