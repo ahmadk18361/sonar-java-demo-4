@@ -22,7 +22,13 @@ pipeline {
                 bat 'python fix_hardcoded_credentials.py'
             }
         }
-        
+
+        stage('Fix SQL Injection') {
+            steps {
+                bat 'python fix_sql_injection.py'
+            }
+        }
+
         stage('Build') {
             steps {
                 bat 'mvn clean package'
