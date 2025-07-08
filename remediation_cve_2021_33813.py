@@ -1,6 +1,6 @@
 import re
 
-with open("src/main/java/com/example/ZipSlipCVE2021_33813Example.java", "r") as file:
+with open("src/main/java/com/example/CommonsIOCVE2021_33813Example.java", "r") as file:
     code = file.read()
 
 # Add path normalization check to prevent Zip Slip
