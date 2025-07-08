@@ -19,7 +19,7 @@ pipeline {
         
         stage('Remediate Vulnerabilities') {
             steps {
-                sh 'python fix_hardcoded_credentials.py'
+                bat 'python fix_hardcoded_credentials.py'
             }
         }
         
