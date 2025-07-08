@@ -36,6 +36,8 @@ pipeline {
         stage('SonarQube Scan') {
             steps {
                 withSonarQubeEnv("${Sonar-cve-s}") {
+                    withCredentials([string(credentialsId: '2ndsonar', variable: '2ndsonar')]) {
+                        bat 'echo Sonar token: %2ndsonar'
                        bat """
                             mvn clean verify sonar:sonar \
                               -Dsonar.projectKey=Sonar-cve-s \
