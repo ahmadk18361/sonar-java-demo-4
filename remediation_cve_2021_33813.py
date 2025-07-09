@@ -1,39 +1,48 @@
 import os
 
-file_path = "src/main/java/com/example/CommonsIOCVE2021_33813Example.java"
+# Path to the vulnerable Java file
+file_path = 'src/main/java/com/example/CommonsIOCVE2021_33813Example.java'
 
-# 1. Read and print original code
-with open(file_path, "r", encoding="utf-8") as f:
+# Read original Java content
+with open(file_path, 'r', encoding='utf-8') as f:
     code = f.read()
 
-print(" Original code:\n", code)
+# New secure version of the while loop (Zip Slip fix)
+secure_code = '''
+        while (entry != null) {
+            File destDir = new File("output");
+            File destFile = new File(destDir, entry.getName());
+            String destDirPath = destDir.getCanonicalPath();
+            String destFilePath = destFile.getCanonicalPath();
 
-# 2. Prepare secure code
-fix_code = '''
-while ((zipEntry = zis.getNextEntry()) != null) {
-    Path destPath = Paths.get("test").resolve(zipEntry.getName()).normalize();
-    if (!destPath.startsWith(Paths.get("test").toAbsolutePath())) {
-        throw new IOException("Bad zip entry: " + zipEntry.getName());
-    }
-    File destFile = destPath.toFile();
-}
+            if (!destFilePath.startsWith(destDirPath + File.separator)) {
+                throw new IOException("Entry is outside of the target dir: " + entry.getName());
+            }
+
+            new FileOutputStream(destFile); // Safe now
+            zipIn.closeEntry();
+            entry = zipIn.getNextEntry();
+        }
 '''
 
-# 3. Replace vulnerable code
-if 'while ((zipEntry = zis.getNextEntry()) != null) {' in code:
-    code = code.replace(
-        'while ((zipEntry = zis.getNextEntry()) != null) {',
-        fix_code
-    )
-    print("\n Vulnerable code replaced.\n")
+# Vulnerable pattern to replace
+vulnerable_code = '''
+        while (entry != null) {
+            File outFile = new File("output/" + entry.getName()); // Vulnerable: No path validation
+            new FileOutputStream(outFile); // Could overwrite sensitive files
+            zipIn.closeEntry();
+            entry = zipIn.getNextEntry();
+        }
+'''
+
+# Replace the vulnerable code
+if vulnerable_code.strip() in code:
+    code = code.replace(vulnerable_code.strip(), secure_code.strip())
+
+    # Save the updated Java file
+    with open(file_path, 'w', encoding='utf-8') as f:
+        f.write(code)
+
+    print("[OK] Zip Slip CVE-2021-33813 remediation applied.")
 else:
-    print("\n Vulnerable code not found in file.\n")
-
-# 4. Print new code
-print(" New code:\n", code)
-
-# 5. Write changes back to file
-with open(file_path, "w", encoding="utf-8") as f:
-    f.write(code)
-
-print("\n File updated. Re-run SonarQube scan to verify.")
+    print("[Sorry] Vulnerable code pattern not found. No changes made.")
