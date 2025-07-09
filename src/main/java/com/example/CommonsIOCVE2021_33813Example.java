@@ -7,7 +7,7 @@ public class CommonsIOCVE2021_33813Example {
         ZipEntry entry = zipIn.getNextEntry();
 
         while (entry != null) {
-            File outFile = new File("output/" + entry.getName()); // ❌ Vulnerable: No path validation
+            File outFile = new File("output/" + entry.getName()); //  Vulnerable: No path validation
             new FileOutputStream(outFile); // Could overwrite sensitive files
             zipIn.closeEntry();
             entry = zipIn.getNextEntry();
