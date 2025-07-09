@@ -1,6 +1,6 @@
 import os
 
-file_path = "src/main/java/com/example/CommonsCVE2021_33813Example.java"
+file_path = "src/main/java/com/example/CommonsIOCVE2021_33813Example.java"
 
 with open(file_path, "r", encoding="utf-8") as f:
     code = f.read()
