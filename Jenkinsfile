@@ -1,4 +1,4 @@
-sqp_d5da224e65b821f4e16a6d65db5933e7cde91bf6pipeline {
+pipeline {
     agent any
 
     tools {
