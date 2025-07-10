@@ -7,7 +7,7 @@ pipeline {
     }
 
     environment {
-        SONARQUBE_SERVER = 'SonarCloud' // Must match Jenkins config name exactly
+        SONARQUBE_SERVER = 'Sonar-cve's' // Must match Jenkins config name exactly
     }
 
     stages {
