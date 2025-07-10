@@ -1,4 +1,4 @@
-pipeline {
+sqp_d5da224e65b821f4e16a6d65db5933e7cde91bf6pipeline {
     agent any
 
     tools {
@@ -45,7 +45,7 @@ pipeline {
                               -Dsonar.projectName='sonar-cve-fix3' \
                               -Dsonar.host.url=http://localhost:9000 \
                               -Dsonar.sources=src/main/java/com/example
-                              -Dsonar.token=sqp_8215ebd40c92e7995822e51551c2a6c8655308db
+                              -Dsonar.token=sqp_d5da224e65b821f4e16a6d65db5933e7cde91bf6
                             """
                     }
                 }
