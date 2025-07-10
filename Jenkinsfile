@@ -45,7 +45,7 @@ pipeline {
                               -Dsonar.projectName='sonar-cve-fix3' \
                               -Dsonar.host.url=http://localhost:9000 \
                               -Dsonar.sources=src/main/java/com/example
-                              -Dsonar.token=sqp_b08b8163f360aa6cb24534b5c579de0a58f6211f
+                              -Dsonar.token=sqp_8215ebd40c92e7995822e51551c2a6c8655308db
                             """
                     }
                 }
