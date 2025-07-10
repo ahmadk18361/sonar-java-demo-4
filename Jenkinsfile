@@ -23,6 +23,15 @@ pipeline {
             }
         }
         
+         stage ('Debug Sonar Token') {
+                steps {
+                    withCredentials([string(credentialsId: '2ndsonar', variable: 'SONAR_TOKEN')]) {
+                        bat 'echo Debug: token is %SONAR_TOKEN%'
+                    }
+                }
+            }
+
+        
         stage('SonarQube Scan') {
             steps {
                 withSonarQubeEnv("${Sonar-cve-s}") {
