@@ -6,7 +6,6 @@ public class CommonsIOCVE2021_33813Example {
         ZipInputStream zipIn = new ZipInputStream(new FileInputStream("sample.zip"));
         ZipEntry entry = zipIn.getNextEntry();
     }
-        
 
 while (entry != null) {
     File destDir = new File("output");
@@ -22,5 +21,6 @@ while (entry != null) {
     new FileOutputStream(destFile); // [OK] Safe now
     zipIn.closeEntry();
     entry = zipIn.getNextEntry();
+        }
     }
 }
