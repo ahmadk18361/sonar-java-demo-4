@@ -1,8 +1,12 @@
-import java.io.*;
+import org.apache.log4j.Logger;
 
-public class CVE_Example_CommandInjection {
-    public static void main(String[] args) throws Exception {
-        String userInput = "calc"; // Simulating unsafe input
-        Runtime.getRuntime().exec("cmd /c " + userInput); // Vulnerable
+public class CVE2021_27568 {
+    static Logger logger = Logger.getLogger(CVE2021_27568.class);
+
+    public static void main(String[] args) {
+        String username = "admin";
+        String password = "hunter2"; // sensitive info
+
+        logger.info("User login attempt: " + username + " / " + password); // ⚠️ Leaks secrets to logs
     }
 }
