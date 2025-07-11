@@ -1,7 +1,7 @@
 import org.apache.log4j.Logger;
 
 public class CommonsIOCVE2021_33813Example {
-    static Logger logger = Logger.getLogger(CVE2021_27568.class);
+    static Logger logger = Logger.getLogger(CommonsIOCVE2021_33813Example.class);
 
     public static void main(String[] args) {
         String username = "admin";
