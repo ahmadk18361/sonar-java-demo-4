@@ -5,11 +5,10 @@ file_path = "src/main/java/com/example/CommonsIOCVE2021_33813Example.java"
 with open(file_path, "r", encoding="utf-8") as f:
     code = f.read()
 
-# Match the vulnerable pattern — flexible for spacing/indentation
-pattern = r"while\s*\(entry\s*!=\s*null\)\s*\{.*?zipIn\.getNextEntry\s*\(\s*\);.*?\}"
-matches = re.sub(pattern, secure_code, code, flags=re.DOTALL)
+# Match the vulnerable pattern – flexible for spacing/indentation
+pattern = r"while\s*\(entry\s*!=\s*null\)\s*{[^}]*new\s+FileOutputStream\(.*?\);\s*zipIn\.closeEntry\(\);\s*entry\s*=\s*zipIn\.getNextEntry\(\);"
 
-# Secure replacement (Zip Slip fix)
+# Secure replacement code (Zip Slip fix)
 secure_code = '''
 while (entry != null) {
     File destDir = new File("output");
@@ -26,7 +25,7 @@ while (entry != null) {
     zipIn.closeEntry();
     entry = zipIn.getNextEntry();
 }
-'''.strip()
+'''
 
 # Strip the vulnerable block
 code, count = re.subn(pattern, secure_code, code, flags=re.DOTALL)
@@ -35,6 +34,6 @@ code, count = re.subn(pattern, secure_code, code, flags=re.DOTALL)
 if count > 0:
     with open(file_path, "w", encoding="utf-8") as f:
         f.write(code)
-    print("[+] CVE-2021-33813 remediation applied.")
+    print("[OK] CVE-2021-33813 remediation applied.")
 else:
-    print("[-] Vulnerable code pattern not found. No changes made.")
+    print("[SORRY] Vulnerable code pattern not found. No changes made.")
