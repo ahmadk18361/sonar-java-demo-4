@@ -1,12 +1,23 @@
-import org.apache.log4j.Logger;
+import re
 
-public class CVE2021_27568 {
-    static Logger logger = Logger.getLogger(CVE2021_27568.class);
+def remediate_log4j_leak(file_path):
+    with open(file_path, 'r') as file:
+        lines = file.readlines()
 
-    public static void main(String[] args) {
-        String username = "admin";
-        String password = "hunter2";
+    fixed_lines = []
+    for line in lines:
+        # Look for the logger line that includes password
+        if re.search(r'logger\.info\(.+password.*\)', line):
+            # Replace the password with redacted tag
+            redacted_line = re.sub(r'\+.*password.*\)', '+ "[REDACTED]")', line)
+            fixed_lines.append(redacted_line)
+        else:
+            fixed_lines.append(line)
 
-        logger.info("User login attempt: " + username + " / [REDACTED]"); //  Masked
-    }
-}
+    with open(file_path, 'w') as file:
+        file.writelines(fixed_lines)
+
+    print(f"[✓] Remediation complete for: {file_path}")
+
+# Run remediation
+remediate_log4j_leak('src/main/java/com/example/CommonsIOCVE2021_33813Example.java')
