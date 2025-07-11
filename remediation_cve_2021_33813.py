@@ -6,8 +6,7 @@ with open(file_path, "r", encoding="utf-8") as f:
     code = f.read()
 
 # Match the vulnerable pattern – flexible for spacing/indentation
-pattern = r"while\s*\(entry\s*!=\s*null\)\s*{[^}]*new\s+FileOutputStream\(.*?\);\s*zipIn\.closeEntry\(\);\s*entry\s*=\s*zipIn\.getNextEntry\(\);"
-
+pattern = r'while\s*\(entry\s*!=\s*null\)\s*\{\s*File outfile = new File\("output/" \+ entry\.getName\(\)\);\s*new FileOutputStream\(outfile\);\s*zipIn\.closeEntry\(\);\s*entry = zipIn\.getNextEntry\(\);\s*\}'
 # Secure replacement code (Zip Slip fix)
 secure_code = '''
 while (entry != null) {
