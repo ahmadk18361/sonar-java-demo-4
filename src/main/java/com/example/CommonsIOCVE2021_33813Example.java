@@ -1,6 +1,6 @@
 import org.apache.log4j.Logger;
 
-public class CVE2021_27568 {
+public class CommonsIOCVE2021_33813Example {
     static Logger logger = Logger.getLogger(CVE2021_27568.class);
 
     public static void main(String[] args) {
