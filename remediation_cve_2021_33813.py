@@ -6,7 +6,8 @@ with open(file_path, "r", encoding="utf-8") as f:
     code = f.read()
 
 # Match the vulnerable pattern — flexible for spacing/indentation
-pattern = r'new\s+FileOutputStream\s*\(\s*destFile\s*\)\s*;\s*zipIn\.closeEntry\s*\(\s*\)\s*;\s*entry\s*=\s*zipIn\.getNextEntry\s*\(\s*\)\s*;'
+pattern = r"while\s*\(entry\s*!=\s*null\)\s*\{.*?zipIn\.getNextEntry\s*\(\s*\);.*?\}"
+matches = re.sub(pattern, secure_code, code, flags=re.DOTALL)
 
 # Secure replacement (Zip Slip fix)
 secure_code = '''
