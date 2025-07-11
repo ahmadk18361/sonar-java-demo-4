@@ -19,7 +19,7 @@ pipeline {
         
         stage('Remediate Vulnerabilities') {
             steps {
-                bat 'remediation_cve_2021_33813.py'
+                bat 'remediation_CVE2021_27568.py'
             }
         }
         
