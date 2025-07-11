@@ -5,7 +5,6 @@ public class CommonsIOCVE2021_33813Example {
     public static void main(String[] args) throws IOException {
         ZipInputStream zipIn = new ZipInputStream(new FileInputStream("sample.zip"));
         ZipEntry entry = zipIn.getNextEntry();
-    }
 
 while (entry != null) {
     File destDir = new File("output");
@@ -23,4 +22,3 @@ while (entry != null) {
     entry = zipIn.getNextEntry();
         }
     }
-}
