@@ -28,12 +28,13 @@ while (entry != null) {
 }
 '''.strip()
 
-# Replace the vulnerable block
-new_code = re.sub(pattern, secure_code, code, flags=re.DOTALL)
+# Strip the vulnerable block
+code, count = re.subn(pattern, secure_code, code, flags=re.DOTALL)
 
+# Write back if changed
 if count > 0:
     with open(file_path, "w", encoding="utf-8") as f:
-        f.write(new_code)
-    print("[OK] Zip Slip CVE-2021-33813 remediation applied.")
+        f.write(code)
+    print("[+] CVE-2021-33813 remediation applied.")
 else:
-    print("[Sorry] Vulnerable code pattern not found. No changes made.")
+    print("[-] Vulnerable code pattern not found. No changes made.")
