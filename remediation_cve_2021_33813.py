@@ -6,8 +6,7 @@ with open(file_path, "r", encoding="utf-8") as f:
     code = f.read()
 
 # Match the vulnerable pattern — flexible for spacing/indentation
-pattern = r'while\(entry[^\)]+\)\s*\{\s*File\s+destFile\s*=\s*new\s+File\(.*?\);\s*new\s+FileOutputStream\(.*?\);\s*zipIn\.closeEntry\(\);\s*entry\s*=\s*zipIn\.getNextEntry\(\);\s*\}'
-
+pattern = r'new\s+FileOutputStream\s*\(\s*destFile\s*\)\s*;\s*zipIn\.closeEntry\s*\(\s*\)\s*;\s*entry\s*=\s*zipIn\.getNextEntry\s*\(\s*\)\s*;'
 
 # Secure replacement (Zip Slip fix)
 secure_code = '''
@@ -29,7 +28,7 @@ while (entry != null) {
 '''.strip()
 
 # Replace the vulnerable block
-new_code, count = re.subn(pattern, secure_code, code)
+new_code = re.sub(pattern, secure_code, code, flags=re.DOTALL)
 
 if count > 0:
     with open(file_path, "w", encoding="utf-8") as f:
