@@ -7,6 +7,6 @@ public class CVE2021_27568 {
         String username = "admin";
         String password = "hunter2"; // sensitive info
 
-        logger.info("User login attempt: " + username + " / " + password); // ⚠️ Leaks secrets to logs
+        logger.info("User login attempt: " + username + " / " + password); //  Leaks secrets to logs
     }
 }
