@@ -6,20 +6,13 @@ public class CommonsIOCVE2021_33813Example {
         ZipInputStream zipIn = new ZipInputStream(new FileInputStream("sample.zip"));
         ZipEntry entry = zipIn.getNextEntry();
 
-while (entry != null) {
-    File destDir = new File("output");
-    File destFile = new File(destDir, entry.getName());
-
-    String destDirPath = destDir.getCanonicalPath();
-    String destFilePath = destFile.getCanonicalPath();
-
-    if (!destFilePath.startsWith(destDirPath + File.separator)) {
-        throw new IOException("Entry is outside the target dir: " + entry.getName());
-    }
-
-    new FileOutputStream(destFile); // [OK] Safe now
-    zipIn.closeEntry();
-    entry = zipIn.getNextEntry();
+        while (entry != null) {
+            File outFile = new File("output/" + entry.getName()); // Vulnerable: No path validation
+            new FileOutputStream(outFile); // Could overwrite sensitive files
+            zipIn.closeEntry();
+            entry = zipIn.getNextEntry();
         }
+
+        zipIn.close();
     }
 }
