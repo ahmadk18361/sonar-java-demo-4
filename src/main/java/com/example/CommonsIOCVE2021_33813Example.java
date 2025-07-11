@@ -1,18 +1,12 @@
-import java.io.*;
-import java.util.zip.*;
+import org.apache.log4j.Logger;
 
-public class CommonsIOCVE2021_33813Example {
-    public static void main(String[] args) throws IOException {
-        ZipInputStream zipIn = new ZipInputStream(new FileInputStream("sample.zip"));
-        ZipEntry entry = zipIn.getNextEntry();
+public class CVE2021_27568 {
+    static Logger logger = Logger.getLogger(CVE2021_27568.class);
 
-        while (entry != null) {
-            File outFile = new File("output/" + entry.getName()); // Vulnerable: No path validation
-            new FileOutputStream(outFile); // Could overwrite sensitive files
-            zipIn.closeEntry();
-            entry = zipIn.getNextEntry();
-        }
+    public static void main(String[] args) {
+        String username = "admin";
+        String password = "hunter2"; // sensitive info
 
-        zipIn.close();
+        logger.info("User login attempt: " + username + " / " + password); // Leaks secrets to logs
     }
 }
