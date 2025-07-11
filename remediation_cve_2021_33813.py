@@ -5,25 +5,32 @@ file_path = "src/main/java/com/example/CommonsIOCVE2021_33813Example.java"
 with open(file_path, "r", encoding="utf-8") as f:
     code = f.read()
 
-# Regex to match any use of entry.getName() inside File + FileOutputStream
-pattern = r'File\s+\w+\s*=\s*new\s+File\s*\(\s*"?output"?\s*\+\s*entry\.getName\(\)\s*\);[\s\S]+?new\s+FileOutputStream\([^)]*\);'
+# Match the vulnerable pattern — flexible for spacing/indentation
+pattern = r'while\s*\(entry\s*!=\s*null\)\s*\{[\s\S]*?new\s+FileOutputStream\([^)]*\);\s*zipIn\.closeEntry\(\);\s*entry\s*=\s*zipIn\.getNextEntry\(\);\s*\}'
 
-secure_fix = '''
-File destDir = new File("output");
-File destFile = new File(destDir, entry.getName());
-String destDirPath = destDir.getCanonicalPath();
-String destFilePath = destFile.getCanonicalPath();
+# Secure replacement (Zip Slip fix)
+secure_code = '''
+while (entry != null) {
+    File destDir = new File("output");
+    File destFile = new File(destDir, entry.getName());
 
-if (!destFilePath.startsWith(destDirPath + File.separator)) {
-    throw new IOException("Entry is outside the target dir: " + entry.getName());
+    String destDirPath = destDir.getCanonicalPath();
+    String destFilePath = destFile.getCanonicalPath();
+
+    if (!destFilePath.startsWith(destDirPath + File.separator)) {
+        throw new IOException("Entry is outside the target dir: " + entry.getName());
+    }
+
+    new FileOutputStream(destFile); // [OK] safe now
+    zipIn.closeEntry();
+    entry = zipIn.getNextEntry();
 }
+'''.strip()
 
-new FileOutputStream(destFile); // [OK] safe now
-'''
+# Replace the vulnerable block
+new_code, count = re.subn(pattern, secure_code, code)
 
-new_code, count = re.subn(pattern, secure_fix.strip(), code)
-
-if count:
+if count > 0:
     with open(file_path, "w", encoding="utf-8") as f:
         f.write(new_code)
     print("[OK] Zip Slip CVE-2021-33813 remediation applied.")
