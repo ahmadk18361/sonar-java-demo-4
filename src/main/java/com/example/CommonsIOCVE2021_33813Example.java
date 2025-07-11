@@ -22,5 +22,6 @@ while (entry != null) {
     new FileOutputStream(destFile); // [OK] Safe now
     zipIn.closeEntry();
     entry = zipIn.getNextEntry();
+    }
+    }
 }
-
