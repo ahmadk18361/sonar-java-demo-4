@@ -17,7 +17,7 @@ def remediate_log4j_leak(file_path):
     with open(file_path, 'w') as file:
         file.writelines(fixed_lines)
 
-    print(f"[✓] Remediation complete for: {file_path}")
+    print(f"[OK] Remediation complete for: {file_path}")
 
 # Run remediation
 remediate_log4j_leak('src/main/java/com/example/CommonsIOCVE2021_33813Example.java')
