@@ -1,23 +1,41 @@
+import os
 import re
 
-def remediate_log4j_leak(file_path):
+# Directory to scan
+SOURCE_DIR = 'src/main/java'
+
+# Detect log lines containing password or secret
+SECRET_LOG_PATTERN = re.compile(r'logger\.(info|warn|error|debug)\s*\(.*(\+.*(password|secret)).*\)', re.IGNORECASE)
+
+def remediate_file(file_path):
     with open(file_path, 'r') as file:
         lines = file.readlines()
 
-    fixed_lines = []
+    modified = False
+    new_lines = []
+
     for line in lines:
-        # Look for the logger line that includes password
-        if re.search(r'logger\.info\(.+password.*\)', line):
-            # Replace the password with redacted tag
-            redacted_line = re.sub(r'\+.*password.*\)', '+ "[REDACTED]")', line)
-            fixed_lines.append(redacted_line)
+        if SECRET_LOG_PATTERN.search(line):
+            # Replace the log with a safe placeholder message
+            safe_line = 'logger.warn("Sensitive data logging avoided.");\n'
+            new_lines.append(safe_line)
+            modified = True
         else:
-            fixed_lines.append(line)
+            new_lines.append(line)
 
-    with open(file_path, 'w') as file:
-        file.writelines(fixed_lines)
+    if modified:
+        with open(file_path, 'w') as file:
+            file.writelines(new_lines)
+        print(f"[✔] Remediated: {file_path}")
+    else:
+        print(f"[-] No changes made: {file_path}")
 
-    print(f"[OK] Remediation complete for: {file_path}")
+def run_remediation():
+    for root, _, files in os.walk(SOURCE_DIR):
+        for filename in files:
+            if filename.endswith(".java"):
+                file_path = os.path.join(root, filename)
+                remediate_file(file_path)
 
-# Run remediation
-remediate_log4j_leak('src/main/java/com/example/CommonsIOCVE2021_33813Example.java')
+if __name__ == "__main__":
+    run_remediation()
