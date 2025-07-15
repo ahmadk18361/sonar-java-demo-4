@@ -2,7 +2,7 @@ import os
 import re
 
 # Directory to scan
-SOURCE_DIR = 'src/main/java'
+SOURCE_DIR = 'src/main/java/com/example'
 
 # Detect log lines containing password or secret
 SECRET_LOG_PATTERN = re.compile(r'logger\.(info|warn|error|debug)\s*\(.*(\+.*(password|secret)).*\)', re.IGNORECASE)
