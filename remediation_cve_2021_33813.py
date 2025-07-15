@@ -2,7 +2,7 @@ import os
 import re
 
 # Directory to scan
-SOURCE_DIR = 'src/main/java'
+SOURCE_DIR = 'src/main/java/com/example'
 
 # Pattern to detect sensitive logging
 SECRET_LOG_PATTERN = re.compile(
