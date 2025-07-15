@@ -19,7 +19,10 @@ pipeline {
         
         stage('Remediate Vulnerabilities') {
             steps {
-                bat 'remediation_cve_2021_33813.py'
+                bat 'remediation_cve_2021_33813.py src/main/java/com/example/CommonsIOCVE2021_33813Example.java'
+                bat 'remediation_cve_2021_33813.py src/main/java/com/example/SecretLoggingBufferedInputExample.java'
+                bat 'remediation_cve_2021_33813.py src/main/java/com/example/SecretLoggingCmdArgsExample.java'
+
             }
         }
         
