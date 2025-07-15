@@ -49,9 +49,9 @@ def remediate_file(file_path):
     if modified:
         with open(file_path, 'w') as file:
             file.writelines(new_lines)
-        print(f"[✓] Remediated: {file_path}")
+        print(f"[OK] Remediated: {file_path}")
     else:
-        print(f"[—] No changes needed: {file_path}")
+        print(f"[SORRY] No changes needed: {file_path}")
 
 def run_remediation():
     for root, _, files in os.walk(SOURCE_DIR):
