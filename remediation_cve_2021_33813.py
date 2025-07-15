@@ -6,12 +6,15 @@ SOURCE_DIR = 'src/main/java/com/example'
 
 # Pattern to detect sensitive logging
 SECRET_LOG_PATTERN = re.compile(
-    r'logger\.(info|warn|error|debug)\s*\(.*(password|secret).*?\)', re.IGNORECASE
-)
+    r'logger\.(info|warn|error|debug)\s*\(\s*"(.*?(password|secret).*?)"', re.IGNORECASE)
 
 # Pattern to detect unsafe encoding in InputStreamReader
 ENCODING_PATTERN = re.compile(r'new InputStreamReader\s*\(\s*System\.in\s*\)')
 ENCODING_SAFE_REPLACEMENT = 'new InputStreamReader(System.in, StandardCharsets.UTF_8)'
+
+# Pattern to detect hardcoded secrets in variable assignments
+HARDCODED_SECRET_PATTERN = re.compile(r'(\b(password|username|secret)\b\s*=\s*["\'].*?["\'])', re.IGNORECASE)
+HARDCODED_REPLACEMENT = r'\2 = System.console().readLine();  // Replaced insecure hardcoded secret'
 
 def remediate_file(file_path):
     with open(file_path, 'r') as file:
@@ -35,6 +38,13 @@ def remediate_file(file_path):
                 new_lines.insert(0, 'import java.nio.charset.StandardCharsets;\n')
                 has_import = True
             safe_line = ENCODING_PATTERN.sub(ENCODING_SAFE_REPLACEMENT, line)
+            new_lines.append(safe_line)
+            modified = True
+            continue
+
+        # Remediate hardcoded credentials
+        if HARDCODED_SECRET_PATTERN.search(line):
+            safe_line = HARDCODED_SECRET_PATTERN.sub(HARDCODED_REPLACEMENT, line)
             new_lines.append(safe_line)
             modified = True
             continue
