@@ -1,57 +1,64 @@
-pipeline {
-    agent any
+import os
+import re
 
-    tools {
-        maven 'Maven'
-        jdk 'jdk-17'
-    }
+SOURCE_DIR = 'src/main/java/com/example'
 
-    environment {
-        SONARQUBE_SERVER = 'Sonar-cve's' // Must match Jenkins config name exactly
-    }
+# Patterns to detect and fix
+SECRET_LOG_PATTERN = re.compile(r'logger\.(info|warn|error|debug)\s*\(\s*.*?(password|secret).*?\)', re.IGNORECASE)
+ENCODING_PATTERN = re.compile(r'new InputStreamReader\s*\(\s*System\.in\s*\)')
+IMPORT_PATTERN = re.compile(r'import java\.io\..*;')
 
-    stages {
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/ahmadk18361/sonar-java-demo-4.git'
-            }
-        }
-        
-        stage('Remediate Vulnerabilities') {
-            steps {
-                bat 'remediation_cve_2021_33813.py src/main/java/com/example/CommonsIOCVE2021_33813Example.java'
-                bat 'remediation_cve_2021_33813.py src/main/java/com/example/SecretLoggingBufferedInputExample.java'
-                bat 'remediation_cve_2021_33813.py src/main/java/com/example/SecretLoggingCmdArgsExample.java'
+def remediate_file(file_path):
+    with open(file_path, 'r') as file:
+        lines = file.readlines()
 
-            }
-        }
-        
-         stage ('Debug Sonar Token') {
-                steps {
-                    withCredentials([string(credentialsId: '2ndsonar', variable: 'SONAR_TOKEN')]) {
-                        bat 'echo Debug: token is %SONAR_TOKEN%'
-                    }
-                }
-            }
+    modified = False
+    new_lines = []
+    has_encoding_fix = False
+    import_inserted = False
+    added_import = False
 
-        
-        stage('SonarQube Scan') {
-            steps {
-                withSonarQubeEnv("${Sonar-cve-s}") {
-                    withCredentials([string(credentialsId: '2ndsonar', variable: 'SONAR_TOKEN')]) {
-                        bat 'mvn sonar:sonar -Dsonar.token=$SONAR_TOKEN'
-                        bat 'echo Sonar token: %SONAR_TOKEN'
-                       bat """
-                            mvn clean verify sonar:sonar \
-                              -Dsonar.projectKey=sonar-cve-fix3 \
-                              -Dsonar.projectName='sonar-cve-fix3' \
-                              -Dsonar.host.url=http://localhost:9000 \
-                              -Dsonar.sources=src/main/java/com/example
-                              -Dsonar.token=sqp_48e700452be9b7e45e8935b54de4d8bd3d271eb2
-                            """
-                    }
-                }
-            }
-        }
-    }
-}
+    for i, line in enumerate(lines):
+        # Fix secret-logging
+        if SECRET_LOG_PATTERN.search(line):
+            safe_line = '        logger.warn("Sensitive data logging avoided.");\n'
+            new_lines.append(safe_line)
+            modified = True
+            continue
+
+        # Fix InputStreamReader encoding
+        if ENCODING_PATTERN.search(line):
+            line = line.replace(
+                'new InputStreamReader(System.in)',
+                'new InputStreamReader(System.in, StandardCharsets.UTF_8)'
+            )
+            modified = True
+            has_encoding_fix = True
+
+        new_lines.append(line)
+
+    # Add missing import for StandardCharsets if encoding was fixed
+    if has_encoding_fix and not any('StandardCharsets' in l for l in lines):
+        for i, line in enumerate(new_lines):
+            if IMPORT_PATTERN.search(line) and not import_inserted:
+                new_lines.insert(i + 1, 'import java.nio.charset.StandardCharsets;\n')
+                modified = True
+                import_inserted = True
+                break
+
+    if modified:
+        with open(file_path, 'w') as file:
+            file.writelines(new_lines)
+        print(f"[✓] Remediated: {file_path}")
+    else:
+        print(f"[—] No changes needed: {file_path}")
+
+def run_remediation():
+    for root, _, files in os.walk(SOURCE_DIR):
+        for filename in files:
+            if filename.endswith('.java'):
+                file_path = os.path.join(root, filename)
+                remediate_file(file_path)
+
+if __name__ == "__main__":
+    run_remediation()
